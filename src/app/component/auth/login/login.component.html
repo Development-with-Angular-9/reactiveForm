@@ -1,12 +1,15 @@
 <!-- <p>login works!</p> -->
 <div class="background text-center">
-    <form class="form-signin animated fadeIn" autocomplete="off">
+    <form class="form-signin animated fadeIn" autocomplete="off" [formGroup]="loginForm" (ngSubmit)="login()" >
+
         <img class= "mb-4 img" src="assets/img/lion.jpeg" alt="logo" />
         <h1 class="h3 mb-3 font-weight-normal">Ingresa!!</h1>
         <label class="sr-only" for="inputEmail">Email</label>
-        <input type="email" class="form-control mb-2" id="inputEmail" placeholder="Ingrese Correo" />
+        <input type="email" class="form-control mb-2" id="inputEmail" placeholder="Ingrese Correo" formControlName="email" [class.is-invalid]="emailValidate"/>
+
         <label class="sr-only" for="inputPassword">Correo</label>
-        <input type="password" class="form-control mb-3" id="inputPassword" placeholder="Ingrese Contraseña">
+        <input type="password" class="form-control mb-3" id="inputPassword" placeholder="Ingrese Contraseña" formControlName="password" [class.is-invalid]="passwordValidate" />
+
         <button type="submit" class="btn btn-lg btn-primary btn-block mb-2">Ingresar</button>
         <a [routerLink]="['/register']"> No tienes una cuenta </a>
         <p class="mt-4 mb-3 text-muted"> Glan Babon V - 2020</p>
