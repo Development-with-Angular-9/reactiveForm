@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user';
+import { AuthService } from 'src/app/services/auth.service';
+import { timeMessage, successDialog, errorMessage } from 'src/app/functions/alerts';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -9,11 +12,15 @@ import { User } from 'src/app/models/user';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup
+  loginForm: FormGroup;
   user: User; 
 
-  constructor(private fb:FormBuilder) { 
-    this.createForm()
+  constructor(
+    private fb:FormBuilder,
+    private authService: AuthService,
+    private router: Router
+    ) { 
+    this.createForm();
   }
 
   ngOnInit(): void {
@@ -28,7 +35,17 @@ export class LoginComponent implements OnInit {
     }else {
       // si el formularo es valido 
       this.setUser();
-      console.log(this.user);
+      // console.log(this.user);
+      this.authService.login(this.user).subscribe((data:any) => {
+        // Adding Alerts
+        timeMessage('Iniciando...', 1500).then(() => {
+          successDialog('Iniciado correcto').then(() => {
+            this.router.navigate(['/home']);
+          });
+        });
+      }, error => {
+        errorMessage('Usuario o Contraseña Incorrecta.');
+      });
     }    
   }
 

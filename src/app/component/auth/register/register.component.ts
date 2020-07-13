@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user';
+import { AuthService } from 'src/app/services/auth.service';
+// alerts
+import { timeMessage, successDialog, errorMessage } from 'src/app/functions/alerts';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +15,11 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   user: User; 
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService, 
+    private router: Router
+    ) {
     // load constructor
     this.createFrom();
   }
@@ -32,7 +40,18 @@ export class RegisterComponent implements OnInit {
     }else {
       // si el formularo es valido
       this.setUser();
-      console.log(this.user)
+      // console.log(this.user)
+      this.authService.register(this.user).subscribe((data:any) => {
+        // console.log('Registro Completado');
+        // adding Alerts
+        timeMessage('Registrando..', 1500).then(() => {
+          successDialog('Registro Correcto');
+          this.router.navigate(['/login']);
+        });
+      }, error => {
+        // console.log(error);
+        errorMessage('Ha acurrido un error. Simba')
+      });
     }
   }
 
